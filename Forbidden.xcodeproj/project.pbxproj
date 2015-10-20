@@ -121,6 +121,7 @@
 		0FAE51261BD4B03500E999FD /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Forbidden;
 				TargetAttributes = {

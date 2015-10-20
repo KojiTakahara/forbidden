@@ -3,16 +3,15 @@ import AVFoundation
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, G8TesseractDelegate {
     
-    // セッション.
     var mySession : AVCaptureSession!
-    // デバイス.
     var myDevice : AVCaptureDevice!
-    // 画像のアウトプット.
     var myImageOutput : AVCaptureVideoDataOutput!
 
+    /**
+    初期動作
+    */
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         if initCamera() {
             // 画像を表示するレイヤーを生成.
             let myVideoLayer : AVCaptureVideoPreviewLayer = AVCaptureVideoPreviewLayer.init(session:mySession)
@@ -32,25 +31,23 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         // セッションの作成.
         mySession = AVCaptureSession()
         // 解像度の指定.
-        mySession.sessionPreset = AVCaptureSessionPresetMedium
+        //mySession.sessionPreset = AVCaptureSessionPresetPhoto
         // デバイス一覧の取得.
         let devices = AVCaptureDevice.devices()
-        
         // バックカメラをmyDeviceに格納.
         for device in devices{
             if(device.position == AVCaptureDevicePosition.Back){
                 myDevice = device as! AVCaptureDevice
             }
         }
-        // 格納できなければ終わり
-        if myDevice == nil {
+        if myDevice == nil { // 格納できなければ終わり
             return false
         }
         // バックカメラからVideoInputを取得.
         let videoInput: AVCaptureInput!
         do {
             videoInput = try AVCaptureDeviceInput.init(device: myDevice!)
-        }catch{
+        } catch {
             videoInput = nil
         }
         // セッションに追加.
@@ -61,7 +58,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         // 出力先を生成.
         myImageOutput = AVCaptureVideoDataOutput()
-        // myImageOutput.videoSettings = [ kCVPixelBufferPixelFormatTypeKey: kCVPixelFormatType_32BGRA ]
+        myImageOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey: Int(kCVPixelFormatType_32BGRA)]
         // FPSを設定
 //        var lockError: NSError?
 //        if myDevice.lockForConfiguration(&lockError) {
@@ -73,10 +70,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 //                myDevice.unlockForConfiguration()
 //            }
 //        }
-        // デリゲートを設定
+        // デリゲートを設定.
         let queue: dispatch_queue_t = dispatch_queue_create("myqueue",  nil)
         myImageOutput.setSampleBufferDelegate(self, queue: queue)
-        // 遅れてきたフレームは無視する
+        // 遅れてきたフレームは無視する.
         myImageOutput.alwaysDiscardsLateVideoFrames = true
         // セッション開始.
         if mySession.canAddOutput(myImageOutput) {
@@ -84,7 +81,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         } else {
             return false
         }
-        // カメラの向きを合わせる
+        // カメラの向きを合わせる.
         for connection in myImageOutput.connections {
             if let conn = connection as? AVCaptureConnection {
                 if conn.supportsVideoOrientation {
@@ -100,9 +97,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     */
     func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
         dispatch_async(dispatch_get_main_queue(), {
-            // UIImageへ変換して表示させる
             let image = CameraUtil.imageFromSampleBuffer(sampleBuffer)
-            //self.analyze(image)
+            self.analyze(image)
         })
     }
     
