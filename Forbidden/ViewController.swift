@@ -125,6 +125,38 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         })
     }
     
+    /**
+    文字を読みやすくするため、白黒にする
+    */
+    func monocro(image: UIImage) -> UIImage {
+        let ciImage = CIImage(image: image)
+        let ciFilter = CIFilter(name: "CIColorMonochrome")
+        ciFilter!.setValue(ciImage, forKey: kCIInputImageKey)
+        ciFilter!.setValue(CIColor(red: 0.75, green: 0.75, blue: 0.75), forKey: kCIInputColorKey)
+        ciFilter!.setValue(NSNumber(float: 1.0), forKey: kCIInputIntensityKey)
+        let ciContext = CIContext(options: nil)
+        let cgImage = ciContext.createCGImage(ciFilter!.outputImage!, fromRect: ciFilter!.outputImage!.extent)
+        return UIImage(CGImage: cgImage)
+    }
+    
+    /**
+    切り取る
+    */
+    func cropName(image: UIImage) -> UIImage {
+        let origWidth  = Int(CGImageGetWidth(image.CGImage))
+        let origHeight = Int(CGImageGetHeight(image.CGImage))
+        let cropRect  = CGRectMake(
+            CGFloat(55),
+            CGFloat(17),
+            CGFloat(origWidth),
+            CGFloat(origHeight / 18))
+        let cropRef = CGImageCreateWithImageInRect(image.CGImage, cropRect)
+        return UIImage(CGImage: cropRef!)
+    }
+    
+    /**
+    文字読み取り
+    */
     func analyze(image: UIImage) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
             let tesseract = G8Tesseract(language: "jpn")
