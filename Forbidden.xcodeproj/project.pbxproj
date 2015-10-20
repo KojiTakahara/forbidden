@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F727DAF1BD5E2640019AF19 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 0F727DAE1BD5E2640019AF19 /* tessdata */; settings = {ASSET_TAGS = (); }; };
 		0FAE51321BD4B03500E999FD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FAE51311BD4B03500E999FD /* AppDelegate.swift */; };
 		0FAE51341BD4B03500E999FD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FAE51331BD4B03500E999FD /* ViewController.swift */; };
 		0FAE51371BD4B03500E999FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FAE51351BD4B03500E999FD /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0F727DAE1BD5E2640019AF19 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
 		0FAE512E1BD4B03500E999FD /* Forbidden.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Forbidden.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FAE51311BD4B03500E999FD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0FAE51331BD4B03500E999FD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -64,6 +66,7 @@
 		0FAE51301BD4B03500E999FD /* Forbidden */ = {
 			isa = PBXGroup;
 			children = (
+				0F727DAE1BD5E2640019AF19 /* tessdata */,
 				0FAE51311BD4B03500E999FD /* AppDelegate.swift */,
 				0FAE51331BD4B03500E999FD /* ViewController.swift */,
 				0FAE51441BD4EAD500E999FD /* CameraUtil.swift */,
@@ -154,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0FAE513C1BD4B03500E999FD /* LaunchScreen.storyboard in Resources */,
+				0F727DAF1BD5E2640019AF19 /* tessdata in Resources */,
 				0FAE51391BD4B03500E999FD /* Assets.xcassets in Resources */,
 				0FAE51371BD4B03500E999FD /* Main.storyboard in Resources */,
 			);

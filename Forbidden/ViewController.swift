@@ -3,9 +3,9 @@ import AVFoundation
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, G8TesseractDelegate {
     
-    var mySession : AVCaptureSession!
-    var myDevice : AVCaptureDevice!
-    var myImageOutput : AVCaptureVideoDataOutput!
+    var mySession: AVCaptureSession!
+    var myDevice: AVCaptureDevice!
+    var myImageOutput: AVCaptureVideoDataOutput!
 
     /**
     初期動作
@@ -22,6 +22,24 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             // 撮影開始
             mySession.startRunning()
         }
+    }
+    
+    var myButton: UIButton!
+    
+    func addButton() {
+        // UIボタンを作成.
+        myButton = UIButton(frame: CGRectMake(0,0,120,50))
+        myButton.backgroundColor = UIColor.redColor();
+        myButton.layer.masksToBounds = true
+        myButton.setTitle("読込中", forState: .Normal)
+        myButton.layer.cornerRadius = 20.0
+        myButton.layer.position = CGPoint(x: self.view.bounds.width/2, y:self.view.bounds.height-50)
+        // UIボタンをViewに追加.
+        self.view.addSubview(myButton);
+    }
+
+    func removeButton() {
+        myButton.removeFromSuperview()
     }
     
     /**
@@ -92,13 +110,18 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         return true
     }
     
+    var flag = true
+    
     /**
     毎フレーム実行される処理
     */
     func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
         dispatch_async(dispatch_get_main_queue(), {
             let image = CameraUtil.imageFromSampleBuffer(sampleBuffer)
-            self.analyze(image)
+            if (self.flag) {
+                self.flag = false
+                self.analyze(image)
+            }
         })
     }
     
@@ -110,6 +133,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             tesseract.pageSegmentationMode = G8PageSegmentationMode.Auto
             tesseract.recognize()
             print(tesseract.recognizedText)
+            self.flag = true
         })
     }
 
