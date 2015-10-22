@@ -21,7 +21,28 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             self.view.layer.addSublayer(myVideoLayer)
             // 撮影開始
             mySession.startRunning()
+        } else {
+            let imageUrl = "http://dm.takaratomy.co.jp/wp-content/uploads/capture_revo01_dmr17-s08.jpg"
+            var card = ImageUtil.getImageByUrl(imageUrl)
+            card = ImageUtil.cropName(card)
+            card = ImageUtil.monocro(card)
+            card = ImageUtil.colorInvert(card, context: CIContext(options: nil))
+            card = ImageUtil.unsharpMask(card, context: CIContext(options: nil))
+            self.analyze(card)
+            self.createImageView(card)
         }
+    }
+    
+    /**
+    画像をビューに表示する
+    */
+    func createImageView(myImage: UIImage) {
+        let myImageView: UIImageView = UIImageView()
+        myImageView.frame = CGRectMake(0, 0, self.view.frame.size.width, 300)
+        myImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        myImageView.image = myImage
+        myImageView.layer.position = CGPoint(x: self.view.bounds.width/2, y: 200.0)
+        self.view.addSubview(myImageView)
     }
     
     var myButton: UIButton!
@@ -123,35 +144,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 self.analyze(image)
             }
         })
-    }
-    
-    /**
-    文字を読みやすくするため、白黒にする
-    */
-    func monocro(image: UIImage) -> UIImage {
-        let ciImage = CIImage(image: image)
-        let ciFilter = CIFilter(name: "CIColorMonochrome")
-        ciFilter!.setValue(ciImage, forKey: kCIInputImageKey)
-        ciFilter!.setValue(CIColor(red: 0.75, green: 0.75, blue: 0.75), forKey: kCIInputColorKey)
-        ciFilter!.setValue(NSNumber(float: 1.0), forKey: kCIInputIntensityKey)
-        let ciContext = CIContext(options: nil)
-        let cgImage = ciContext.createCGImage(ciFilter!.outputImage!, fromRect: ciFilter!.outputImage!.extent)
-        return UIImage(CGImage: cgImage)
-    }
-    
-    /**
-    切り取る
-    */
-    func cropName(image: UIImage) -> UIImage {
-        let origWidth  = Int(CGImageGetWidth(image.CGImage))
-        let origHeight = Int(CGImageGetHeight(image.CGImage))
-        let cropRect  = CGRectMake(
-            CGFloat(55),
-            CGFloat(17),
-            CGFloat(origWidth),
-            CGFloat(origHeight / 18))
-        let cropRef = CGImageCreateWithImageInRect(image.CGImage, cropRect)
-        return UIImage(CGImage: cropRef!)
     }
     
     /**

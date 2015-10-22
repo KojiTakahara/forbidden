@@ -14,6 +14,7 @@
 		0FAE51391BD4B03500E999FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FAE51381BD4B03500E999FD /* Assets.xcassets */; };
 		0FAE513C1BD4B03500E999FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0FAE513A1BD4B03500E999FD /* LaunchScreen.storyboard */; };
 		0FAE51451BD4EAD500E999FD /* CameraUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FAE51441BD4EAD500E999FD /* CameraUtil.swift */; settings = {ASSET_TAGS = (); }; };
+		0FF668451BD8E1A2005A4ABB /* ImageUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FF668441BD8E1A2005A4ABB /* ImageUtil.swift */; settings = {ASSET_TAGS = (); }; };
 		D83A1FF117FCEF08A03BF949 /* libPods-Forbidden.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E08565B39154BCAF1CE60D7 /* libPods-Forbidden.a */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 		0FAE513D1BD4B03500E999FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0FAE51431BD4B72B00E999FD /* Forbidden-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Forbidden-Bridging-Header.h"; sourceTree = "<group>"; };
 		0FAE51441BD4EAD500E999FD /* CameraUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraUtil.swift; sourceTree = "<group>"; };
+		0FF668441BD8E1A2005A4ABB /* ImageUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtil.swift; sourceTree = "<group>"; };
 		8E08565B39154BCAF1CE60D7 /* libPods-Forbidden.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Forbidden.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F41177589E0B87C50B1E4862 /* Pods-Forbidden.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Forbidden.release.xcconfig"; path = "Pods/Target Support Files/Pods-Forbidden/Pods-Forbidden.release.xcconfig"; sourceTree = "<group>"; };
 		FBCC3688BF640B91A7AE2C27 /* Pods-Forbidden.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Forbidden.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Forbidden/Pods-Forbidden.debug.xcconfig"; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				0FAE51311BD4B03500E999FD /* AppDelegate.swift */,
 				0FAE51331BD4B03500E999FD /* ViewController.swift */,
 				0FAE51441BD4EAD500E999FD /* CameraUtil.swift */,
+				0FF668441BD8E1A2005A4ABB /* ImageUtil.swift */,
 				0FAE51351BD4B03500E999FD /* Main.storyboard */,
 				0FAE51431BD4B72B00E999FD /* Forbidden-Bridging-Header.h */,
 				0FAE51381BD4B03500E999FD /* Assets.xcassets */,
@@ -206,6 +209,7 @@
 				0FAE51451BD4EAD500E999FD /* CameraUtil.swift in Sources */,
 				0FAE51341BD4B03500E999FD /* ViewController.swift in Sources */,
 				0FAE51321BD4B03500E999FD /* AppDelegate.swift in Sources */,
+				0FF668451BD8E1A2005A4ABB /* ImageUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
