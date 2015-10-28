@@ -50,11 +50,70 @@ class ImageUtil {
     }
     
     /**
+    比率を指定してリサイズ
+    */
+    class func resize(image: UIImage, ratio: CGFloat) -> UIImage {
+        let resizedSize = CGSize(width: Int(image.size.width * ratio), height: Int(image.size.height * ratio))
+        UIGraphicsBeginImageContext(resizedSize)
+        image.drawInRect(CGRect(x: 0, y: 0, width: resizedSize.width, height: resizedSize.height))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return resizedImage
+    }
+    
+    /**
     色の反転
     */
     class func colorInvert(originalImage: UIImage, context: CIContext) -> UIImage {
         let colorInvert = CIFilter(name: "CIColorInvert")
         return self.filterImage(originalImage, filter: colorInvert!, context: context)
+    }
+    
+    /**
+    shadow
+    */
+    class func highlightShadowAdjust(originalImage: UIImage, context: CIContext) -> UIImage {
+        let filter = CIFilter(name: "CIHighlightShadowAdjust")
+        filter?.setValue(0.5, forKey: "inputShadowAmount")
+        filter?.setValue(1, forKey: "inputHighlightAmount")
+        return self.filterImage(originalImage, filter: filter!, context: context)
+    }
+    
+    /**
+    CIEdgeWork
+    */
+    class func edgeWork(originalImage: UIImage, context: CIContext) -> UIImage {
+        let filter = CIFilter(name: "CIEdgeWork")
+        filter?.setValue(0.1, forKey: "inputRadius")
+        return self.filterImage(originalImage, filter: filter!, context: context)
+    }
+    
+    /**
+    CIColorControls
+    */
+    class func colorControls(originalImage: UIImage, context: CIContext) -> UIImage {
+        let filter = CIFilter(name: "CIColorControls")
+        return self.filterImage(originalImage, filter: filter!, context: context)
+    }
+    
+    /**
+    CIExposureAdjust
+    */
+    class func exposureAdjust(originalImage: UIImage, context: CIContext) -> UIImage {
+        let filter = CIFilter(name: "CIExposureAdjust")
+        filter?.setValue(1, forKey: "inputEV")
+        return self.filterImage(originalImage, filter: filter!, context: context)
+    }
+    
+    /**
+    CILineOverlay
+    */
+    class func lineOverlay(originalImage: UIImage, context: CIContext) -> UIImage {
+        let filter = CIFilter(name: "CILineOverlay")
+        filter?.setValue(0.91, forKey: "inputNRNoiseLevel")
+        filter?.setValue(0.91, forKey: "inputNRSharpness")
+        filter?.setValue(100, forKey: "inputContrast")
+        return self.filterImage(originalImage, filter: filter!, context: context)
     }
     
     /**

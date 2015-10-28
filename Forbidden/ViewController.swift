@@ -24,13 +24,25 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         } else {
             let imageUrl = "http://dm.takaratomy.co.jp/wp-content/uploads/capture_revo01_dmr17-s08.jpg"
             var card = ImageUtil.getImageByUrl(imageUrl)
-            card = ImageUtil.cropName(card)
-            card = ImageUtil.monocro(card)
-            card = ImageUtil.colorInvert(card, context: CIContext(options: nil))
-            card = ImageUtil.unsharpMask(card, context: CIContext(options: nil))
+            card = self.processImage(card)
             self.analyze(card)
             self.createImageView(card)
         }
+    }
+    
+    /**
+    画像を加工する
+    */
+    func processImage(image: UIImage) -> UIImage {
+        let context = CIContext(options: nil)
+        var card = ImageUtil.cropName(image)
+        card = ImageUtil.monocro(card)
+        //card = ImageUtil.colorInvert(card, context: context)
+        //card = ImageUtil.unsharpMask(card, context: context)
+        card = ImageUtil.resize(card, ratio: 10)
+        card = ImageUtil.highlightShadowAdjust(card, context: context)
+        card = ImageUtil.exposureAdjust(card, context: context)
+        return card
     }
     
     /**
@@ -138,9 +150,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     */
     func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
         dispatch_async(dispatch_get_main_queue(), {
-            let image = CameraUtil.imageFromSampleBuffer(sampleBuffer)
+            var image = CameraUtil.imageFromSampleBuffer(sampleBuffer)
             if (self.flag) {
                 self.flag = false
+                image = self.processImage(image)
                 self.analyze(image)
             }
         })
@@ -151,7 +164,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     */
     func analyze(image: UIImage) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
-            let tesseract = G8Tesseract(language: "jpn")
+            let tesseract = G8Tesseract(language: "eng")
             tesseract.delegate = self
             tesseract.image = image
             tesseract.pageSegmentationMode = G8PageSegmentationMode.Auto
