@@ -82,7 +82,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         // セッションの作成.
         mySession = AVCaptureSession()
         // 解像度の指定.
-        //mySession.sessionPreset = AVCaptureSessionPresetPhoto
+        mySession.sessionPreset = AVCaptureSessionPresetPhoto
         // デバイス一覧の取得.
         let devices = AVCaptureDevice.devices()
         // バックカメラをmyDeviceに格納.
@@ -169,9 +169,28 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             tesseract.image = image
             tesseract.pageSegmentationMode = G8PageSegmentationMode.Auto
             tesseract.recognize()
-            print(tesseract.recognizedText)
+            let recognizedText = tesseract.recognizedText
+            if !self.blank(recognizedText) {
+                print(recognizedText)
+                let alertController = self.createActionSheet("", message: recognizedText)
+                self.presentViewController(alertController, animated: true, completion: nil)
+            }
             self.flag = true
         })
+    }
+    
+
+    func blank(text: String) -> Bool {
+        let trimmed = text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+        return trimmed.isEmpty
+    }
+
+    
+    func createActionSheet(title: String, message: String) -> UIAlertController {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        let defaultAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alertController.addAction(defaultAction)
+        return alertController
     }
 
     override func didReceiveMemoryWarning() {
