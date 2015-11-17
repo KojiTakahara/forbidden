@@ -22,12 +22,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             // 撮影開始
             mySession.startRunning()
         } else {
-            let imageUrl = "http://dm.takaratomy.co.jp/wp-content/uploads/capture_revo01_dmr17-s08.jpg"
+            var imageUrl = "http://dm.takaratomy.co.jp/wp-content/uploads/capture_revo01_dmr17-s08.jpg" // メガマナロック
+            imageUrl = "http://livedoor.blogimg.jp/oregairu/imgs/5/c/5c6619b6.jpg" // ウィクロス
+            imageUrl = "http://apostle18.up.n.seesaa.net/apostle18/image/image-ebf92.jpg?d=a2" // キングボルシャック
             var card = ImageUtil.getImageByUrl(imageUrl)
             card = self.processImage(card)
             self.analyze(card)
             self.createImageView(card)
         }
+        self.showGridLine()
+        self.createIndicator()
     }
     
     /**
@@ -37,8 +41,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         let context = CIContext(options: nil)
         var card = ImageUtil.cropName(image)
         card = ImageUtil.monocro(card)
-        //card = ImageUtil.colorInvert(card, context: context)
-        //card = ImageUtil.unsharpMask(card, context: context)
+        card = ImageUtil.colorInvert(card, context: context)
+        card = ImageUtil.unsharpMask(card, context: context)
         card = ImageUtil.resize(card, ratio: 10)
         card = ImageUtil.highlightShadowAdjust(card, context: context)
         card = ImageUtil.exposureAdjust(card, context: context)
@@ -57,22 +61,36 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         self.view.addSubview(myImageView)
     }
     
-    var myButton: UIButton!
-    
-    func addButton() {
-        // UIボタンを作成.
-        myButton = UIButton(frame: CGRectMake(0,0,120,50))
-        myButton.backgroundColor = UIColor.redColor();
-        myButton.layer.masksToBounds = true
-        myButton.setTitle("読込中", forState: .Normal)
-        myButton.layer.cornerRadius = 20.0
-        myButton.layer.position = CGPoint(x: self.view.bounds.width/2, y:self.view.bounds.height-50)
-        // UIボタンをViewに追加.
-        self.view.addSubview(myButton);
+    /**
+    ビュー上に赤い枠線を描く
+    */
+    func showGridLine() {
+        let myBoundSize: CGSize = UIScreen.mainScreen().bounds.size
+        let width = myBoundSize.width
+        let height = myBoundSize.height
+        let grigLineView: UIView = UIView()
+        grigLineView.frame = CGRectMake(width * 0.05, height * 0.15, width * 0.9, height * 0.7)
+        grigLineView.layer.borderWidth = 4.0
+        grigLineView.layer.borderColor = UIColor.redColor().CGColor
+        grigLineView.layer.cornerRadius = 10.0
+        self.view.addSubview(grigLineView)
     }
+    
 
-    func removeButton() {
-        myButton.removeFromSuperview()
+    var myActivityIndicator: UIActivityIndicatorView!
+    
+    func createIndicator() {
+        // インジケータを作成する.
+        myActivityIndicator = UIActivityIndicatorView()
+        myActivityIndicator.frame = CGRectMake(0, 0, 50, 50)
+        myActivityIndicator.center = self.view.center
+        // アニメーションが停止している時もインジケータを表示させる.
+        myActivityIndicator.hidesWhenStopped = false
+        myActivityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
+        // アニメーションを開始する.
+        myActivityIndicator.startAnimating()
+        // インジケータをViewに追加する.
+        self.view.addSubview(myActivityIndicator)
     }
     
     /**
@@ -152,6 +170,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         dispatch_async(dispatch_get_main_queue(), {
             var image = CameraUtil.imageFromSampleBuffer(sampleBuffer)
             if (self.flag) {
+                self.myActivityIndicator.startAnimating()
                 self.flag = false
                 image = self.processImage(image)
                 self.analyze(image)
@@ -176,6 +195,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 self.presentViewController(alertController, animated: true, completion: nil)
             }
             self.flag = true
+            self.myActivityIndicator.stopAnimating()
         })
     }
     
@@ -184,7 +204,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         let trimmed = text.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
         return trimmed.isEmpty
     }
-
     
     func createActionSheet(title: String, message: String) -> UIAlertController {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
